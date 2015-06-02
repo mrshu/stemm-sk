@@ -6,6 +6,9 @@ Adapted from the Czech stemmer with the following copyright
 
     Copyright © 2010 Luís Gomes <luismsgomes@gmail.com>.
 
+It was also inspired by sumy:
+    https://github.com/miso-belica/sumy/blob/dev/sumy/nlp/stemmers/czech.py
+
 Ported from the Java implementation available at:
     http://members.unine.ch/jacques.savoy/clef/index.html
 
@@ -15,23 +18,32 @@ from __future__ import division, print_function, unicode_literals
 import re
 import sys
 
+WORD_PATTERN = re.compile(r"^\w+$", re.UNICODE)
+
 
 def stem(word, aggressive=False):
-    if not re.match("^\\w+$", word):
+    if not isinstance(word, unicode):
+        word = word.decode("utf8")
+
+    if not WORD_PATTERN.match(word):
         return word
+
     if not word.islower() and not word.istitle() and not word.isupper():
         print("warning: skipping word with mixed case: {}".format(word),
               file=sys.stderr)
         return word
+
     # all our pattern matching is done in lowercase
     s = word.lower()
     s = _remove_case(s)
     s = _remove_possessives(s)
+
     if aggressive:
         s = _remove_comparative(s)
         s = _remove_diminutive(s)
         s = _remove_augmentative(s)
         s = _remove_derivational(s)
+
     if word.isupper():
         return s.upper()
     if word.istitle():
@@ -53,11 +65,11 @@ def _remove_case(word):
                          "ové", "ovi", "ými"):
             return word[:-3]
     if len(word) > 4:
-        if word.endswith("em"):
+        if word.endswith("om"):
             return _palatalise(word[:-1])
         if word[-2:] in ("es", "ém", "ím"):
             return _palatalise(word[:-2])
-        if word[-2:] in ("úm", "at", "ám", "os", "us", "ým", "mi", "ou"):
+        if word[-2:] in ("úm", "at", "ám", "os", "us", "ým", "mi", "ou", "ej"):
             return word[:-2]
     if len(word) > 3:
         if word[-1] in "eií":
@@ -146,7 +158,7 @@ def _remove_derivational(word):
     if len(word) > 4:
         if word[-2:] in ("áč", "ač", "án", "an", "ár", "as"):
             return word[:-2]
-        if word[-2:] in ("ec", "en", "éř", "íř", "ic", "in", "ín",
+        if word[-2:] in ("ec", "en", "ér", "ír", "ic", "in", "ín",
                          "it", "iv"):
             return _palatalise(word[:-1])
         if word[-2:] in ("ob", "ot", "ov", "oň", "ul", "yn", "čk", "čn",
@@ -176,5 +188,5 @@ if __name__ == '__main__':
         sys.exit("usage: {} light|aggressive".format(sys.argv[0]))
     aggressive = sys.argv[1] == "aggressive"
     for line in sys.stdin:
-        print(*[cz_stem(word, aggressive=aggressive)
+        print(*[stem(word, aggressive=aggressive)
                 for word in line.split()])
