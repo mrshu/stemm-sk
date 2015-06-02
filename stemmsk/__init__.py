@@ -16,7 +16,6 @@ Ported from the Java implementation available at:
 from __future__ import division, print_function, unicode_literals
 
 import re
-import sys
 
 WORD_PATTERN = re.compile(r"^\w+$", re.UNICODE)
 
@@ -183,10 +182,15 @@ def _palatalise(word):
         return word[:-3] + "sk"
     return word[:-1]
 
-if __name__ == '__main__':
+
+def main():
+    import sys
     if len(sys.argv) != 2 or sys.argv[1] not in ("light", "aggressive"):
         sys.exit("usage: {} light|aggressive".format(sys.argv[0]))
     aggressive = sys.argv[1] == "aggressive"
     for line in sys.stdin:
         print(*[stem(word, aggressive=aggressive)
                 for word in line.split()])
+
+if __name__ == '__main__':
+    main()
