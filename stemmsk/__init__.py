@@ -155,7 +155,7 @@ def _remove_derivational(word):
                          "ctv", "stv"):
             return word[:-3]
     if len(word) > 4:
-        if word[-2:] in ("áč", "ač", "án", "an", "ár", "as"):
+        if word[-2:] in ("áč", "ač", "án", "an", "ár", "ar", "ás", "as"):
             return word[:-2]
         if word[-2:] in ("ec", "en", "ér", "ír", "ic", "in", "ín",
                          "it", "iv"):
