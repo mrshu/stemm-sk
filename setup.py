@@ -3,11 +3,11 @@ from os import path
 
 setup(
     name='stemmsk',
-    version='0.0.1',
+    version='0.0.2',
 
     description='A Pythonic stemmer for Slovak language',
 
-    url='https://github.com/mrshu/mrshu/stemm-sk',
+    url='https://github.com/mrshu/stemm-sk',
 
     author='mr.Shu',
     author_email='mr@shu.io',
