@@ -12,8 +12,8 @@ You can install `stemm-sk` from PyPI by running
 
 Here is a very simple example of usage of `stemm-sk`:
 
-    $ echo "listina základních práv evropské unie" | stemmsk light
-    list základn práv evropsk uni
+    $ echo "listina základních práv európskej únie" | stemmsk light
+    list základn práv európsk úni
 
 ## Inspiration and Credits
 
